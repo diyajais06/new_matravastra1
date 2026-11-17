@@ -1,0 +1,212 @@
+{
+  "project_name": "MATRA VASTRA — Premium 3D Luxury Fashion",
+  "archetype": "LUXURY & HERITAGE STREETWEAR (Kashi / Varanasi Inspired)",
+  "emotional_tone": "Majestic, Cultured, Mystical, Regal, High-End Streetwear",
+  "theme": "Dark Mode Default with Deep Matte Black and Antique Gold Accents",
+  "typography": {
+    "headings": {
+      "font_family": "'Playfair Display', 'Cinzel', 'Cormorant Garamond', serif",
+      "style": "3D Metallic Gold Bevel / Emboss styling, High Contrast, Luxury Editorial",
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#C5A059] drop-shadow-[0_4px_12px_rgba(212,175,55,0.3)]",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#FAF6EE]",
+      "h3_subsection": "text-xl sm:text-2xl font-semibold text-[#D4AF37]"
+    },
+    "body": {
+      "font_family": "'Plus Jakarta Sans', 'Outfit', 'Manrope', sans-serif",
+      "style": "Clean, highly readable, increased letter-spacing for labels",
+      "text_main": "text-base sm:text-lg text-[#FAF6EE]/90 leading-relaxed",
+      "text_muted": "text-sm text-[#FAF6EE]/60",
+      "overline_label": "text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37]"
+    }
+  },
+  "color_system": {
+    "background_primary": "#080708",
+    "background_secondary": "#0D0C0E",
+    "background_card": "#121114",
+    "accent_primary_gold": "#D4AF37",
+    "accent_champagne_gold": "#F3E5AB",
+    "accent_warm_ivory": "#FAF6EE",
+    "accent_deep_maroon": "#58181A",
+    "border_gold_subtle": "rgba(212, 175, 55, 0.2)",
+    "border_gold_bright": "rgba(212, 175, 55, 0.6)",
+    "gradient_gold_metallic": "linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)",
+    "gradient_maroon_dark": "linear-gradient(180deg, rgba(88,24,26,0.4) 0%, rgba(8,7,8,0.95) 100%)"
+  },
+  "layout_and_spacing": {
+    "spacing_philosophy": "Generous luxury spacing (2x to 3x default padding). Cards must have minimum p-6 to p-8 padding.",
+    "container_max_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "grid_bento": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8",
+    "hero_overlay": "bg-gradient-to-b from-[#080708]/60 via-[#080708]/40 to-[#080708]"
+  },
+  "threed_and_canvas": {
+    "library": "Three.js / React Three Fiber / Drei / Canvas API",
+    "background_scene": {
+      "elements": [
+        "Varanasi Ghats silhouette & temple spire geometry",
+        "Flowing Ganga water surface reflection shader",
+        "Floating golden ember particles (diya effect)",
+        "Waving Banarasi silk gold thread ribbon animation",
+        "Mouse parallax depth movement on window scroll"
+      ],
+      "lighting": "Ambient warm gold light (intensity 1.2) + Directional spotlight on key elements",
+      "performance": "DPI throttled, fallbacks for low-end mobile hardware"
+    },
+    "product_tee_viewer": {
+      "type": "Interactive 3D T-shirt mesh / Canvas 360 viewer",
+      "features": ["360-degree rotation drag", "Front/Back design flip", "Dynamic color texture swap (Matte Black, Vintage Maroon, Ivory Gold)", "Devanagari / Kashi logo print placement on chest & back"]
+    }
+  },
+  "navigation_header": {
+    "style": "Fixed floating glassmorphism header",
+    "background": "bg-[#080708]/80 backdrop-blur-xl border-b border-[#D4AF37]/20",
+    "elements": [
+      "3D-styled Gold MATRA VASTRA Brand Logo",
+      "Nav Links: Home, Shop All, Collections (Kashi, Purvanchal, Aspirant), About, Bulk Orders, Track Order",
+      "Search trigger modal",
+      "Wishlist counter button",
+      "Shopping Bag Icon with animated golden item counter badge",
+      "Mobile Menu drawer"
+    ]
+  },
+  "collections": [
+    {
+      "id": "kashi-spiritual",
+      "name": "01 KASHI / SPIRITUAL",
+      "color_theme": "Deep Matte Black + Antique Gold",
+      "tagline": "Rooted in Sacred Vibrations & Eternal Energy",
+      "motifs": "Trishul, Sanskrit Typography, Ghat Geometry, Damru vectors",
+      "bg_card": "bg-gradient-to-b from-[#121114] to-[#0D0C0E] border-[#D4AF37]/30"
+    },
+    {
+      "id": "apna-purvanchal",
+      "name": "02 APNA PURVANCHAL",
+      "color_theme": "Warm Terracotta Maroon + Gold & Charcoal",
+      "tagline": "Pride, Culture & Unflinching Heritage",
+      "motifs": "Folk Motifs, Heavy GSM Fleece, Raw Canvas Badges, Heritage Prints",
+      "bg_card": "bg-gradient-to-b from-[#58181A]/20 to-[#0D0C0E] border-[#58181A]/40"
+    },
+    {
+      "id": "aspirant-life",
+      "name": "03 ASPIRANT LIFE",
+      "color_theme": "Minimalist Matte Black + Champagne Gold",
+      "tagline": "For the Seekers, Hustlers & Modern Scholars of Kashi",
+      "motifs": "Clean Geometric Oversized Cuts, Minimal Typography, Discreet Embroidery",
+      "bg_card": "bg-gradient-to-b from-[#18171C] to-[#080708] border-[#FAF6EE]/20"
+    }
+  ],
+  "pages_to_build": [
+    {
+      "route": "/",
+      "name": "Home",
+      "sections": [
+        "Cinematic 3D Kashi Background Canvas",
+        "Hero: Headline 'JAHAN SE HUM AATE HAIN.', Subhead 'Not Just Clothing. A Legacy of Culture, Identity & Kashi.', 3D Gold Logo emblem, Floating T-shirt interactive preview, Primary CTAs 'EXPLORE COLLECTION' and 'DISCOVER OUR STORY'",
+        "Marquee ribbon: 'WEAR YOUR ROOTS • REPRESENT YOUR CULTURE • FROM THE SOUL OF KASHI • HEAVYWEIGHT 300 GSM FABRIC • BANARASI HERITAGE'",
+        "Featured Collections Grid (01 Kashi Spiritual, 02 Apna Purvanchal, 03 Aspirant Life)",
+        "3D Interactive T-Shirt Studio Widget (Rotate, Change Color, View Front/Back)",
+        "Top Selling Tees Showcase with hover alternate image & Quick Add to Bag",
+        "Brand Manifesto Section ('FROM THE SOUL OF KASHI' with video/audio vibe preview & Ghats imagery)",
+        "Customer Reviews / Testimonials with Golden Star ratings",
+        "Newsletter signup ('Join the Kashi Legacy Clan')"
+      ]
+    },
+    {
+      "route": "/shop",
+      "name": "Shop All",
+      "features": ["Collection Filter tabs", "Sort by Price/Popularity", "Size Selector (S, M, L, XL, XXL)", "Color Swatch Filter", "Grid/List Layout switch", "3D tee quick preview modal"]
+    },
+    {
+      "route": "/collection/:id",
+      "name": "Collection Dedicated View",
+      "features": ["Custom banner matching collection aesthetic", "Curated product grid", "Collection mythos description"]
+    },
+    {
+      "route": "/product/:id",
+      "name": "Product Details",
+      "features": ["3D interactive rotating model", "High-res gallery", "Size selection (S-XXL) with size guide modal", "Color selection", "GSM & Fabric spec details (300 GSM Heavyweight Cotton)", "Add to Bag & Buy Now", "Wishlist toggle", "Delivery Pincode checker"]
+    },
+    {
+      "route": "/about",
+      "name": "About Brand",
+      "features": ["Story of Matra Vastra", "Varanasi craft inspiration", "Artisan tribute", "Timeline of identity"]
+    },
+    {
+      "route": "/bulk-orders",
+      "name": "Bulk & Custom Orders",
+      "features": ["Customization enquiry form: Name, Phone, Org, Quantity, Customization details", "Direct WhatsApp quotation button", "Custom college/event tee examples"]
+    },
+    {
+      "route": "/contact",
+      "name": "Contact Us",
+      "features": ["Flagship Kashi Store Address", "Contact form", "Email/Phone details", "Interactive dark gold map view"]
+    },
+    {
+      "route": "/cart",
+      "name": "Cart Page & Drawer",
+      "features": ["Item list with quantity modifiers", "Subtotal calculation", "Coupon discount field ('KASHI10')", "Checkout CTA"]
+    },
+    {
+      "route": "/checkout",
+      "name": "Checkout Page",
+      "features": ["Shipping Address Form", "Razorpay Payment Gateway simulation dialog", "Order summary breakdown", "Instant order placed confirmation page"]
+    },
+    {
+      "route": "/track-order",
+      "name": "Order Tracking",
+      "features": ["Order ID lookup", "Visual progress bar (Order Placed -> Printing in Kashi -> Shipped -> Out for Delivery)"]
+    }
+  ],
+  "floating_widgets": {
+    "whatsapp_button": {
+      "label": "Chat with Kashi Concierge",
+      "action": "Opens WhatsApp chat link with pre-filled message"
+    },
+    "bag_drawer": {
+      "type": "Slide-over drawer",
+      "trigger": "Bag Icon in Header"
+    }
+  },
+  "image_urls": {
+    "fashion_models": [
+      "https://images.unsplash.com/photo-1756483510830-f5b6e0150f74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBpbmRpYW4lMjBmYXNoaW9uJTIwYmxhY2slMjBnb2xkJTIwc3RyZWV0d2VhciUyMG1vZGVsfGVufDB8fHx8MTc5MzY3ODU3Mnww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1631008622409-49549f02b992?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjBmYXNoaW9uJTIwYmxhY2slMjBnb2xkJTIwc3RyZWV0d2VhciUyMG1vZGVsfGVufDB8fHx8MTc5MzY3ODU3Mnww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1781106785641-ae55a05ad4fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjBmYXNoaW9uJTIwYmxhY2slMjBnb2xkJTIwc3RyZWV0d2VhciUyMG1vZGVsfGVufDB8fHx8MTc5MzY3ODU3Mnww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1589197585459-87c328a8a646?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBpbmRpYW4lMjBmYXNoaW9uJTIwYmxhY2slMjBnb2xkJTIwc3RyZWV0d2VhciUyMG1vZGVsfGVufDB8fHx8MTc5MzY3ODU3Mnww&ixlib=rb-4.1.0&q=85"
+    ],
+    "streetwear_tees": [
+      "https://images.unsplash.com/photo-1660485760386-b8957f9b9b96?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwyfHxibGFjayUyMGx1eHVyeSUyMHQtc2hpcnQlMjBzdHJlZXR3ZWFyJTIwbW9kZWwlMjBtYW58ZW58MHx8fHwxNzkzNjc4NTc5fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1778759335271-91d85dacaf96?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwzfHxibGFjayUyMGx1eHVyeSUyMHQtc2hpcnQlMjBzdHJlZXR3ZWFyJTIwbW9kZWwlMjBtYW58ZW58MHx8fHwxNzkzNjc4NTc5fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1571455786673-9d9d6c194f90?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwxfHxibGFjayUyMGx1eHVyeSUyMHQtc2hpcnQlMjBzdHJlZXR3ZWFyJTIwbW9kZWwlMjBtYW58ZW58MHx8fHwxNzkzNjc4NTc5fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1628737490381-117c818d1ad7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHw0fHxibGFjayUyMGx1eHVyeSUyMHQtc2hpcnQlMjBzdHJlZXR3ZWFyJTIwbW9kZWwlMjBtYW58ZW58MHx8fHwxNzkzNjc4NTc5fDA&ixlib=rb-4.1.0&q=85"
+    ],
+    "varanasi_ghats": [
+      "https://images.unsplash.com/photo-1717323821798-8cee2f6826ff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHw0fHx2YXJhbmFzaSUyMGdoYXQlMjBnYW5nYSUyMGJvYXQlMjBnb2xkJTIwbmlnaHR8ZW58MHx8fHwxNzkzNjc4NTc4fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1682489251896-c06dd3b3dea1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwzfHx2YXJhbmFzaSUyMGdoYXQlMjBnYW5nYSUyMGJvYXQlMjBnb2xkJTIwbmlnaHR8ZW58MHx8fHwxNzkzNjc4NTc4fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1613445607898-f46e51645acf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHx2YXJhbmFzaSUyMGdoYXQlMjBnYW5nYSUyMGJvYXQlMjBnb2xkJTIwbmlnaHR8ZW58MHx8fHwxNzkzNjc4NTc4fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1571536802807-30451e3955d8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHx2YXJhbmFzaSUyMGdoYXQlMjBnYW5nYSUyMGJvYXQlMjBnb2xkJTIwbmlnaHR8ZW58MHx8fHwxNzkzNjc4NTc4fDA&ixlib=rb-4.1.0&q=85"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Ensure all interactive buttons, links, inputs, size chips, and product cards have data-testid attributes (e.g., data-testid='explore-collection-btn', data-testid='add-to-cart-btn').",
+    "Use standard React .js files in src (not .tsx).",
+    "Integrate Three.js / @react-three/fiber or direct HTML5 Canvas floating gold particle animation for smooth performance across devices.",
+    "Implement Sonner toasts for notifications like 'Added to Bag', 'Wishlist updated', 'Order Placed'.",
+    "Ensure the gold headers use rich 3D drop-shadows and metallic gradient text.",
+    "Keep header background non-transparent (use backdrop-blur-xl with bg-[#080708]/85).",
+    "Make Razorpay modal interactive with smooth step progression and confirmation receipt animation.",
+    "Ensure WhatsApp floating button works directly using window.open('https://wa.me/919999999999?text=...') link."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "All interactive and key informational elements MUST include a data-testid attribute to facilitate robust automated testing."
+  ]
+}

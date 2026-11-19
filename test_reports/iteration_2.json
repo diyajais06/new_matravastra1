@@ -1,0 +1,34 @@
+{
+  "summary": "Iteration 2 covered the new AI products, logo intro and animated logos, plus regression of the iteration-1 fixes. Backend: 19/19 pytest pass. Changes to the test file: 18 products, 6 per collection, is_new=true returns 9, new slugs kaal-bhairav-black and chai-and-chapters-brown exist, and verify is now idempotent (a second verify keeps the timeline at 2 entries). Frontend: (1) Intro [logo-intro] shows on a fresh session. Gold warp lines draw first, then 14 strips slide in from alternating sides and rebuild the full logo, then 'WEAR YOUR ROOTS' and 'Woven in Kashi' appear. The logo box ratio is 0.86159 and the natural image ratio is 0.86158 (1164:1351), so the logo is not distorted. The final woven logo has no visible seams. The intro sets sessionStorage mv_intro=1 and does not show again after reload. intro-skip-btn dismisses it. No page errors. (2) nav-logo (48x56), hero-logo (152x176) and footer-logo (138x160) all use /assets/logo.jpeg with the correct ratio, and each has the shine-sweep layer. (3) hero-headline: all 5 words had opacity 1, a gold background-clip:text fill and non-zero width at 100, 300, 600, 1500 and 4000ms after load. Screenshots confirm JAHAN SE HUM AATE HAIN. is always fully visible. (4) new-drops-section rail has 9 cards and 9 NEW badges, and it scrolls (scrollWidth 3380 vs 1280). craft-strip shows 240 GSM / Kashi / 18+ / S–XXL. Shop shows 18 PIECES with 18 cards. kashi, purvanchal and aspirant each show 6. No broken images. (5) Regression: Kaal Bhairav back view and 3D flip-to-back print are no longer mirrored ('KOTWAL OF KASHI' reads correctly), and Chai & Chapters 3D back also reads correctly. Add to bag sets nav-cart-count=1. Buy Now, checkout form, KASHI10, demo dialog (₹978 = 999-100+79), Pay, success MV00542500, cart cleared and Track button all work end to end. (6) Mobile 390: intro logo fits (x 62–328, ratio intact). Home scrollWidth is 390 and html has overflow-x:hidden, so the overflow is fixed. Quick Add is visible (opacity 1) on touch-size screens.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Home New Drops rail", "issue": "The rail uses snap-x snap-mandatory with snap-start but has no scroll-padding. Cards snap to the scroll container's edge, ignoring px-4/lg:px-8. On mobile (390) the first card and its title sit flush at x=0, with no left gutter. On desktop the cards are offset about 32px left of the section heading. Fix: add scroll-px-4 sm:scroll-px-6 lg:scroll-px-8 (scroll-padding-inline) to [data-testid=new-drops-rail].", "selector": "[data-testid='new-drops-rail']", "priority": "LOW"}
+    ],
+    "integration_issues": [
+      {"flow": "New Drops 'Shop New' button", "issue": "new-drops-view-all-btn goes to plain /shop (all 18), not a list filtered to new items. Users expecting 'new' see everything.", "affected_selectors": ["new-drops-view-all-btn"]}
+    ],
+    "design_issues": [
+      {"screen": "Home New Drops (desktop)", "issues": ["There are no prev/next arrows or a visible scroll hint. Mouse users without a trackpad can only scroll the rail with shift+wheel or the thin scrollbar."]},
+      {"screen": "Logo intro", "issues": ["In headless Chromium the main thread was busy at first paint, so the weave was still in progress about 1.5s after the overlay mounted, and the overlay stayed about 6s in total (timers were delayed). On slow devices the intro may feel longer than 4.3s. Consider mounting the heavy 3D hero only after the intro, or keep it as is."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_matravastra_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Add scroll-padding (scroll-px-*) to new-drops-rail so snapped cards keep the page gutter",
+    "Optional: make 'Shop New' link to a new-only filter (e.g. /shop?new=1)",
+    "Optional: add rail arrow buttons for desktop mouse users"
+  ],
+  "critical_code_review_comments": [
+    "LogoIntro: the onDone timeout is tied to the [onDone] dependency. finishIntro is memoised, so this is fine, but skip plus the timeout can both call onDone. That is harmless because it is idempotent.",
+    "Hero headline uses key={w} for words. Fine because the words are unique.",
+    "The prefers-reduced-motion rule disables shimmer and shine, which is good. The intro itself still plays under reduced motion; consider skipping it for those users."
+  ],
+  "updated_files": ["/app/backend/tests/test_matravastra_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "97%"},
+  "test_credentials": "None - no auth",
+  "seed_data_creation": "Created TEST orders (TEST_User 9999900001, TEST_Iter2 9999900003, e.g. MV00542500), TEST_ bulk and contact entries",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Checkout inputs are data-testid=checkout-{field}-input. Set sessionStorage mv_intro=1 before navigation to skip the intro. Products: 18 total, 9 is_new. All iteration-1 issues verified fixed (3D mirror, mobile overflow, quick-add visibility, idempotent verify). Only a LOW rail snap-padding issue remains."
+}

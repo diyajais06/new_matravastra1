@@ -1,0 +1,45 @@
+{
+  "summary": "First full E2E run of MATRA VASTRA. Backend: 16/16 pytest pass (products list/filter/featured/detail/404, payment config demo, order server-side totals incl. KASHI10 + free-ship/79 shipping, validation 400/422, demo verify, track incl. case-insensitive id and wrong phone 404, bulk qty>=10, contact). Frontend: home (headline, subheading, logos, CTAs, 3 collection cards, 4 featured), shop (9 items, filters, sort low/high correct), 3 collection pages (3 each), product detail (front/back/3D toggle, flip, size-required toast, add to bag, wishlist, buy now -> /checkout), quick add + nav-cart-count, wishlist page, cart inc/dec (min 1)/remove/empty state, checkout (invalid coupon toast, KASHI10 10% off, demo dialog, success order number, cart cleared), track (success with confirmed status; wrong phone shows track-error), bulk (category select, qty<10 blocked by HTML min, success toast, wa.me/916393707020), contact submit, WhatsApp float href, mobile menu at 390px. All work. Found 1 visual bug (mirrored back print in 3D) and a few minor issues.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/orders/{n}/verify", "issue": "Not idempotent: calling verify again on an already confirmed order pushes another 'confirmed' timeline entry and overwrites payment_id. In demo mode anyone who knows an order number can mark it paid (fine for demo, but guard with status == pending_payment)."},
+      {"endpoint": "POST /api/orders", "issue": "Customer email has no format validation (plain str), and phone is only min_length=10 with no digits check."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Tee3D (product detail 3D view, Flip to Back)", "issue": "The back print shows up mirrored (for example, 'WORK IN SILENCE' on silent-grind-white reads backwards). RCA: Tee3D.jsx line 32 builds the back geometry with printGeometry(shape, true), which mirrors the UVs, but the back mesh is also rotated by Math.PI on Y (line 47). The two flips cancel out the wrong way. Fix: use printGeometry(shape, false) for gb, or drop the UV mirror.", "selector": "[data-testid='product-tee-3d'] + [data-testid='flip-3d-btn']", "priority": "HIGH"},
+      {"component": "ProductCard Quick Add", "issue": "Quick Add has opacity-0 until group-hover, so touch/mobile users never see it. Also, the card's preserve-3d tilt can make the first click hit the card Link and open the product page instead of adding to cart. In automation, elementFromPoint at the button center returned the image container before the hover settled.", "selector": "[data-testid^='quick-add-']", "priority": "MEDIUM"},
+      {"component": "Home page (mobile 390px)", "issue": "documentElement scrollWidth is 434px (> 390). An IMG reaches right=409px and body has overflow-x:hidden but html does not, so the page can scroll sideways on some mobile browsers. Other pages are 390px.", "selector": "html", "priority": "LOW"}
+    ],
+    "integration_issues": [
+      {"flow": "Demo payment", "issue": "payDemo in Checkout.jsx uses try/finally with no catch. If verify fails there is an unhandled rejection and no error toast.", "affected_selectors": ["demo-pay-confirm-btn"]}
+    ],
+    "design_issues": [
+      {"screen": "Shop", "issues": ["shop-sort-select is a native <select>, which breaks the luxury theme. Use a shadcn Select.", "'9 PIECES' count text (white ~35% opacity) has low contrast."]},
+      {"screen": "Mobile home", "issues": ["The hero first shows only the dim fallback background until the 3D content and animations load (around 1-3s)."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_matravastra_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix the mirrored back texture in Tee3D.jsx: printGeometry(shape, false) for the back geometry",
+    "Make Quick Add visible and usable on touch devices, and make card clicks hit the button reliably (e.g. raise z-index / translateZ on the button, or stop the 3D tilt from affecting hit-testing)",
+    "Fix horizontal overflow on mobile home (overflow-x:hidden on html or the root wrapper, or clamp the overflowing image)",
+    "Add a catch with an error toast in Checkout payDemo",
+    "Make verify idempotent (only transition from pending_payment)",
+    "Optional: shadcn Select for sort; EmailStr validation on the backend"
+  ],
+  "critical_code_review_comments": [
+    "Checkout cart list key uses slug+size but the store key is slug-size-color, which could give duplicate keys if colors are added later",
+    "The product slug given in the review request ('matravastra-3d--2jt027np') is actually the preview hostname, not a product. Tests used real slugs (mahadev-gold-oversized, silent-grind-white, padhai-repeat-slate)",
+    "An earlier console log (before App.js was last edited at 04:12) showed 'destroy is not a function' in AnimatedRoutes from a useEffect returning a non-function. Not reproduced in any of my runs, so it is fixed in the current code"
+  ],
+  "updated_files": ["/app/backend/tests/test_matravastra_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "95%"},
+  "test_credentials": "None - no auth",
+  "seed_data_creation": "Created test orders (customer name TEST_*/TEST Ravi, phones 9999900001/9876543210), TEST_ bulk enquiries and contact messages in the DB",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run: REACT_APP_BACKEND_URL=... pytest /app/backend/tests. Payment is demo mode. Quick-add in Playwright needs mouse.move onto the button and a short wait before mouse.click. Bulk route is /bulk-orders, track is /track-order. Retest the 3D flip-to-back mirror fix and the mobile home overflow."
+}

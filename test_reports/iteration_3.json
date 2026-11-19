@@ -1,0 +1,26 @@
+{
+  "summary": "Iteration 3 tested SEO, AEO and the sitemap (frontend only). All requested items pass. (1) I checked 15 routes in Playwright. Each has a unique title, exactly 1 meta description, 1 canonical (matching og:url), 5 og:* and 3 twitter:* tags, and exactly 1 h1. /cart, /checkout (with an item in the cart) and /wishlist have robots 'noindex, follow'. All other pages are 'index, follow'. (2) All JSON-LD parses as JSON. Home: ClothingStore, WebSite and FAQPage (5). Shop: ItemList (18) and BreadcrumbList. Each collection: ItemList (6) and BreadcrumbList. Product: Product (INR 1399, InStock) and BreadcrumbList. FAQ: FAQPage (12). Bulk: Service. About: AboutPage. Contact: ContactPage. (3) The /faq accordion has 12 questions; items 0, 5 and 11 expand and collapse. home-faq-section has 5 questions, they expand, and home-faq-all-btn goes to /faq. (4) The /sitemap page lists 8 pages, 3 collections and 18 products. I opened all 29 links: each renders 1 h1 and none shows a 404. (5) /sitemap.xml is valid XML with 29 <loc> and served as application/xml. Its 18 product slugs match /api/products exactly. /robots.txt has the Sitemap line and allows GPTBot, OAI-SearchBot, ChatGPT-User, PerplexityBot, ClaudeBot and Google-Extended. /llms.txt returns 200. (6) product-breadcrumb is visible (HOME / KASHI / SPIRITUAL / KAAL BHAIRAV BLACK). The footer has /faq and /sitemap links. (7) Regression: the intro shows on a fresh session and sets mv_intro=1; the hero renders. Add to bag, checkout and the demo payment work end to end (order MV66279495). No page errors.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: sitemap.xml, robots.txt and llms.txt hardcode the preview domain (matravastra-3d--2jt027np.preview.emergentagent.com). Update them to the production domain at deploy.",
+    "Optional: /shop?new=1 sets its canonical to /shop?new=1. Consider canonical /shop to avoid duplicate content.",
+    "Optional: SEO tags are set client-side only (CSR). index.html has a default description and OG tags but no canonical. Non-JS crawlers and social scrapers see only the generic home meta. Consider prerendering (e.g. react-snap) if social previews per product matter."
+  ],
+  "critical_code_review_comments": [
+    "Seo.jsx: upsert/setCanonical mutate head tags from index.html, so there are no duplicates. Good. og:image in index.html is relative (/assets/logo.jpeg). Use an absolute URL for scrapers that don't run JS.",
+    "The JSON-LD <script> tags render inside the React tree (body). That is valid for Google and they unmount correctly on navigation."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100%"},
+  "test_credentials": "None - no auth",
+  "seed_data_creation": "Created 1 TEST order via demo checkout (TEST_Iter3, phone 9999900004, MV66279495)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Set sessionStorage mv_intro=1 to skip the intro. /checkout redirects to /cart when the cart is empty, so add an item first to test checkout meta. Checkout inputs: checkout-{name,phone,email,address,city,state,pincode}-input, then place-order-btn and demo-pay-confirm-btn. The FAQ uses faq-question-{i} and faq-answer-{i}, on /faq and inside home-faq-section."
+}

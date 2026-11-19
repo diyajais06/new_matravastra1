@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /wishlist
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://matravastra-3d--2jt027np.preview.emergentagent.com/sitemap.xml

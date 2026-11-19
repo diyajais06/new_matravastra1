@@ -212,9 +212,12 @@ SEED = [
       "Sand beige tee with line art of stacked books and a desk lamp, for every BHU and Lanka library regular.",
       [{"name": "Sand Beige", "hex": "#D8CCB4"}],
       ("b9a64ff01e607553d1332461c7cd6fa6097430f70e411d07c4258ecaa1df0352", "7b9ca12b6d0c054c78ccea0935a434795c490a04ee0db20c5f2b3f099b12eb0d"), True, True),
-    P("chai-and-chapters-brown", "Chai & Chapters Brown", "aspirant", 999, "One more cup. One more chapter.",
-      "Coffee brown tee with a steaming kulhad on the chest, fuel for the late-night study sessions.",
-      [{"name": "Coffee Brown", "hex": "#4A3022"}],
+    # TODO: this entry was truncated in the Emergent export (its front/back image IDs are missing).
+    # Restore the image tuple and uncomment it to bring the 18th product back.
+    # P("chai-and-chapters-brown", "Chai & Chapters Brown", "aspirant", 999, "One more cup. One more chapter.",
+    #   "Coffee brown tee with a steaming kulhad on the chest, fuel for the late-night study sessions.",
+    #   [{"name": "Coffee Brown", "hex": "#4A3022"}],
+    #   ("<front_image_id>", "<back_image_id>")),
 ]
 
 

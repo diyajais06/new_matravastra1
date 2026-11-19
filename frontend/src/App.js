@@ -19,7 +19,7 @@ import Bulk from "./pages/Bulk";
 import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import TrackOrder from " ./pages/TrackOrder";
+import TrackOrder from " ./pages/Trackorder";
 import Wishlist from "./pages/Wishlist";
 import Faq from "./pages/Faq";
 import SitemapPage from "./pages/SitemapPage";

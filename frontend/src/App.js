@@ -19,12 +19,13 @@ import Bulk from "./pages/Bulk";
 import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import TrackOrder from " ./pages/Trackorder";
+import TrackOrder from "./pages/Trackorder";
 import Wishlist from "./pages/Wishlist";
 import Faq from "./pages/Faq";
 import SitemapPage from "./pages/SitemapPage";
 import Hampers from "./pages/Hampers";
 import Download from "./pages/Download";
+import Admin from "./pages/Admin";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -49,8 +50,23 @@ function AnimatedRoutes() {
         <Route path="/sitemap" element={<SitemapPage />} />
         <Route path="/hampers" element={<Hampers />} />
         <Route path="/download" element={<Download />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </AnimatePresence>
+  );
+}
+
+function AppLayout() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+  return (
+    <>
+      {!isAdmin && <Background />}
+      {!isAdmin && <Navbar />}
+      <AnimatedRoutes />
+      {!isAdmin && <Footer />}
+      {!isAdmin && <WhatsAppButton />}
+    </>
   );
 }
 
@@ -66,11 +82,7 @@ function App() {
       <StoreProvider>
         <BrowserRouter>
           <AnimatePresence>{!introDone && <LogoIntro key="intro" onDone={finishIntro} />}</AnimatePresence>
-          <Background />
-          <Navbar />
-          <AnimatedRoutes />
-          <Footer />
-          <WhatsAppButton />
+          <AppLayout />
           <Toaster
             position="bottom-left"
             toastOptions={{ style: { background: "#121114", color: "#faf6ee", border: "1px solid rgba(212,175,55,.35)", fontFamily: "Plus Jakarta Sans" } }}

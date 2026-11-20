@@ -409,7 +409,6 @@ async def contact(body: ContactMessage):
     return {"id": str(res.inserted_id), "ok": True}
 
 
-app.include_router(api)
 app.add_middleware(CORSMiddleware, allow_credentials=True,
                    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
                    allow_methods=["*"], allow_headers=["*"])
@@ -557,3 +556,6 @@ async def admin_customers(_owner: str = Depends(require_admin)):
     ]
     rows = await db.orders.aggregate(pipeline).to_list(500)
     return [{"name": x.get("customer", {}).get("name", ""), "phone": x["_id"], "email": x.get("customer", {}).get("email", ""), "city": x.get("customer", {}).get("city", ""), "orders": x["orders"], "spent": x["spent"], "last_order": x["last_order"]} for x in rows if x.get("_id")]
+
+# Register after all public and owner-only routes have been declared.
+app.include_router(api)

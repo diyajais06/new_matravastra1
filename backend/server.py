@@ -419,3 +419,141 @@ app.add_middleware(CORSMiddleware, allow_credentials=True,
 async def shutdown_db_client():
     client.close()
     
+
+# ---------------- Owner-only Admin API ----------------
+import base64
+import json
+import time
+from fastapi import Header, Depends
+
+OWNER_EMAIL = os.environ.get("ADMIN_EMAIL", "matravastra@gmail.com").strip().lower()
+ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH", "")
+ADMIN_TOKEN_SECRET = os.environ.get("ADMIN_TOKEN_SECRET", "")
+
+class AdminLogin(BaseModel):
+    email: str
+    password: str
+
+class AdminOrderUpdate(BaseModel):
+    status: str
+
+def _b64(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).decode().rstrip("=")
+
+def _admin_token(email: str) -> str:
+    payload = _b64(json.dumps({"sub": email, "exp": int(time.time()) + 8 * 60 * 60}, separators=(",", ":")).encode())
+    signature = _b64(hmac.new(ADMIN_TOKEN_SECRET.encode(), payload.encode(), hashlib.sha256).digest())
+    return payload + "." + signature
+
+async def require_admin(authorization: Optional[str] = Header(default=None)):
+    if not ADMIN_TOKEN_SECRET:
+        raise HTTPException(503, "Admin authentication is not configured on the server")
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(401, "Admin login required")
+    token = authorization[7:].strip()
+    try:
+        payload_part, signature = token.split(".", 1)
+        expected = _b64(hmac.new(ADMIN_TOKEN_SECRET.encode(), payload_part.encode(), hashlib.sha256).digest())
+        if not hmac.compare_digest(expected, signature):
+            raise ValueError("signature")
+        padding = "=" * (-len(payload_part) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_part + padding))
+        if payload.get("sub") != OWNER_EMAIL or int(payload.get("exp", 0)) < int(time.time()):
+            raise ValueError("expiry")
+        return payload["sub"]
+    except Exception:
+        raise HTTPException(401, "Admin session expired. Please log in again.")
+
+@api.post("/admin/login")
+async def admin_login(body: AdminLogin):
+    if not ADMIN_PASSWORD_HASH or not ADMIN_TOKEN_SECRET:
+        raise HTTPException(503, "Owner admin is not configured. Set ADMIN_PASSWORD_HASH and ADMIN_TOKEN_SECRET in backend environment.")
+    if body.email.strip().lower() != OWNER_EMAIL:
+        raise HTTPException(401, "Invalid owner credentials")
+    try:
+        salt_hex, digest_hex = ADMIN_PASSWORD_HASH.split(":", 1)
+        actual = hashlib.pbkdf2_hmac("sha256", body.password.encode(), bytes.fromhex(salt_hex), 310000).hex()
+    except Exception:
+        raise HTTPException(503, "Admin password hash configuration is invalid")
+    if not hmac.compare_digest(actual, digest_hex):
+        raise HTTPException(401, "Invalid owner credentials")
+    return {"access_token": _admin_token(OWNER_EMAIL), "token_type": "bearer", "expires_in": 28800, "email": OWNER_EMAIL}
+
+@api.get("/admin/dashboard")
+async def admin_dashboard(_owner: str = Depends(require_admin)):
+    total_orders = await db.orders.count_documents({})
+    pending_orders = await db.orders.count_documents({"status": {"$in": ["pending_payment", "pending", "processing"]}})
+    confirmed = await db.orders.count_documents({"status": {"$in": ["confirmed", "shipped", "delivered"]}})
+    revenue_result = await db.orders.aggregate([
+        {"$match": {"status": {"$in": ["confirmed", "shipped", "delivered"]}}},
+        {"$group": {"_id": None, "total": {"$sum": "$total"}}}
+    ]).to_list(1)
+    return {
+        "orders": total_orders,
+        "pending_orders": pending_orders,
+        "products": await db.products.count_documents({}),
+        "customers": len(await db.orders.distinct("customer.phone")),
+        "bulk_enquiries": await db.bulk_enquiries.count_documents({}),
+        "revenue": revenue_result[0]["total"] if revenue_result else 0,
+        "confirmed_orders": confirmed
+    }
+
+@api.get("/admin/orders")
+async def admin_orders(_owner: str = Depends(require_admin)):
+    docs = await db.orders.find({}, {"_id": 0}).sort("created_at", -1).to_list(300)
+    return docs
+
+@api.patch("/admin/orders/{order_number}")
+async def admin_update_order(order_number: str, body: AdminOrderUpdate, _owner: str = Depends(require_admin)):
+    allowed = {"pending_payment", "confirmed", "processing", "shipped", "delivered", "cancelled"}
+    if body.status not in allowed:
+        raise HTTPException(400, "Unsupported order status")
+    result = await db.orders.update_one({"order_number": order_number}, {
+        "$set": {"status": body.status},
+        "$push": {"timeline": {"status": body.status, "at": now_iso()}}
+    })
+    if not result.matched_count:
+        raise HTTPException(404, "Order not found")
+    return {"ok": True, "order_number": order_number, "status": body.status}
+
+@api.get("/admin/products")
+async def admin_products(_owner: str = Depends(require_admin)):
+    return await db.products.find({}, {"_id": 0}).sort("name", 1).to_list(300)
+
+@api.post("/admin/products")
+async def admin_create_product(body: Product, _owner: str = Depends(require_admin)):
+    if await db.products.find_one({"slug": body.slug}):
+        raise HTTPException(409, "A product with this slug already exists")
+    await db.products.insert_one(body.to_mongo())
+    return {"ok": True, "slug": body.slug}
+
+@api.put("/admin/products/{slug}")
+async def admin_update_product(slug: str, body: Product, _owner: str = Depends(require_admin)):
+    if body.slug != slug and await db.products.find_one({"slug": body.slug}):
+        raise HTTPException(409, "A product with this slug already exists")
+    result = await db.products.replace_one({"slug": slug}, body.to_mongo())
+    if not result.matched_count:
+        raise HTTPException(404, "Product not found")
+    return {"ok": True, "slug": body.slug}
+
+@api.delete("/admin/products/{slug}")
+async def admin_delete_product(slug: str, _owner: str = Depends(require_admin)):
+    result = await db.products.delete_one({"slug": slug})
+    if not result.deleted_count:
+        raise HTTPException(404, "Product not found")
+    return {"ok": True}
+
+@api.get("/admin/enquiries")
+async def admin_enquiries(_owner: str = Depends(require_admin)):
+    docs = await db.bulk_enquiries.find({}, {"_id": 0}).sort("created_at", -1).to_list(300)
+    return docs
+
+@api.get("/admin/customers")
+async def admin_customers(_owner: str = Depends(require_admin)):
+    pipeline = [
+        {"$sort": {"created_at": -1}},
+        {"$group": {"_id": "$customer.phone", "customer": {"$first": "$customer"}, "orders": {"$sum": 1}, "spent": {"$sum": "$total"}, "last_order": {"$first": "$created_at"}}},
+        {"$sort": {"last_order": -1}}
+    ]
+    rows = await db.orders.aggregate(pipeline).to_list(500)
+    return [{"name": x.get("customer", {}).get("name", ""), "phone": x["_id"], "email": x.get("customer", {}).get("email", ""), "city": x.get("customer", {}).get("city", ""), "orders": x["orders"], "spent": x["spent"], "last_order": x["last_order"]} for x in rows if x.get("_id")]
